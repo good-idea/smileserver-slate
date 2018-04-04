@@ -3,96 +3,58 @@ title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell
-  - ruby
-  - python
-  - javascript
 
 toc_footers:
   - <a href='#'>Sign Up for a Developer Key</a>
   - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
-
-includes:
-  - errors
 
 search: true
 ---
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
-
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](https://github.com/lord/slate). Feel free to edit it and use it as a base for your own API's documentation.
+Welcome to the Smileserver documentation. Incomplete.
 
 # Authentication
 
-> To authorize, use this code:
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
+```shell
+curl -X POST \
+  https://v4-api.smilebooth.com/api/v4/user/get-by-login-info \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "username": "generally an email",
+  "password": "secret"
+}'
 ```
 
-```python
-import kittn
+> The above request returns JSON structured like this:
 
-api = kittn.authorize('meowmeowmeow')
+```JSON
+{
+  "isAdmin": true,
+  "isUnrestricted": true,
+  "homePortalId": 2,
+  "isSuperuser": false,
+  "username": "username",
+  "token": "some-crazy-long-token",
+  "id": 27
+}
 ```
+
+Authentication is built out loosely according to the Client Credientials flow, and is not suitable for frontend applications where the code is available to the user.
+
+Send credentials via POST to `https://v4-api.smilebooth.com/api/v4/user/get-by-login-info` and a token is returned. To access authenticated endpoints, include this token in the header under the name: `x-user-token`
+
+# Folders
+
+## Get All Folders
+
+This endpoint returns an array of objects which include folder names and ids. Currently there is a bug which returns repeat folder names, so results must be filtered on the receiving end.
 
 ```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
-
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
-
-# Kittens
-
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
+curl -X POST \
+  https://test-api.smilebooth.com/api/v4/folders/list-names-noauth \
+  -H 'Content-Type: application/json'
 ```
 
 > The above command returns JSON structured like this:
@@ -100,140 +62,230 @@ let kittens = api.kittens.get();
 ```json
 [
   {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
+    "id": 528,
+    "name": "addidas"
   },
   {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+    "id": 529,
+    "name": "tesla-dance-party"
+  },
+  {
+    "id": 530,
+    "name": "dave"
   }
 ]
 ```
 
-This endpoint retrieves all kittens.
-
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`POST https://test-api.smilebooth.com/api/v4/folders/list-names-noauth`
 
-### Query Parameters
+## Get a Specific Folder
 
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
+This command gets the folder details and gallery objects contained within it.
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
+curl -X POST \
+  https://test-api.smilebooth.com/api/v4/folders/get-sharing-details-noauth \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "id": 30
+}'
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  "folder": {
+    "id": 30,
+    "name": "downtest",
+    "description": "downtest",
+    "ownerId": 2,
+    "portalId": 1,
+    "uploadTypes": [],
+    "autoPrint": false,
+    "autoPrintTypes": [],
+    "webhooks": [
+      ""
+    ],
+    "date": "1970-01-01T00:00:00",
+    "permanent": false,
+    "test": false
+  },
+  "galleries": [
+    {
+      "id": 30,
+      "folderId": 30,
+      "name": "Default",
+      "web": {
+        "enableEmail": true,
+        "enableTwitter": true,
+        "enableFacebook": true,
+        "enablePinterest": true,
+        "enableGooglePlus": true
+      },
+      "maps": [
+        {
+          "mode": "video",
+          "subtype": "original"
+        },
+        {
+          "mode": "gif",
+          "subtype": "gif"
+        },
+        {
+          "mode": "print",
+          "subtype": "print"
+        },
+        {
+          "mode": "photo",
+          "subtype": "original"
+        }
+      ]
+    }
+  ]
 }
 ```
 
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`POST https://test-api.smilebooth.com/api/v4/folders/get-sharing-details-noauth`
 
-### URL Parameters
+### Request Body JSON
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the kitten to retrieve
+ID | The ID of the folder to retrieve
 
-## Delete a Specific Kitten
+# Images
 
-```ruby
-require 'kittn'
+## Get All Images in a Gallery
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
+This endoint returns an array of image objects given a specific gallery ID.
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
+curl -X POST \
+  https://test-api.smilebooth.com/api/v4/images/list-by-gallery-noauth \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "galleryId": 3
+}'
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
-{
-  "id": 2,
-  "deleted" : ":("
-}
+[
+  {
+    "id": 333,
+    "sequenceId": 333,
+    "subtype": 0,
+    "position": 0,
+    "url": "https://s3.amazonaws.com/smilebooth_images/boost/tablet/1bcxd00035",
+    "cardUrl": "https://s3.amazonaws.com/smilebooth_images/boost/tablet/1bcxd00035",
+    "thumbUrl": "https://s3.amazonaws.com/smilebooth_images/boost/tablet/thumb/1bcxd00035",
+    "width": 1024,
+    "height": 768,
+    "mode": 0,
+    "source": null,
+    "hidden": false,
+    "created": "2016-09-10T14:50:00.785223-04:00"
+  },
+  {
+    "id": 332,
+    "sequenceId": 332,
+    "subtype": 0,
+    "position": 0,
+    "url": "https://s3.amazonaws.com/smilebooth_images/boost/tablet/1bcxd00034",
+    "cardUrl": "https://s3.amazonaws.com/smilebooth_images/boost/tablet/1bcxd00034",
+    "thumbUrl": "https://s3.amazonaws.com/smilebooth_images/boost/tablet/thumb/1bcxd00034",
+    "width": 1024,
+    "height": 768,
+    "mode": 0,
+    "source": null,
+    "hidden": false,
+    "created": "2016-09-10T14:50:00.781464-04:00"
+  }
+]
 ```
-
-This endpoint deletes a specific kitten.
 
 ### HTTP Request
 
-`DELETE http://example.com/kittens/<ID>`
+`POST https://test-api.smilebooth.com/api/v4/images/list-by-gallery-noauth`
 
-### URL Parameters
+### Request Body JSON
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the kitten to delete
+ID | The ID of the gallery
 
+# Sharing
+
+These are enpoints which will deliver an image to a recipient.
+
+## Send to Email
+
+Send image to recipient via email.
+
+```curl
+curl -X POST \
+  https://v4-api.smilebooth.com/api/v4/sharers/email/share \
+  -H 'Content-Type: application/json'
+  -d '{
+  "email": "email@example.com",
+  "uploadId": "17940",
+  "galleryId": "3"
+}'
+```
+
+> The above command will return a number (not sure what it is :))
+
+```json
+12122
+```
+
+### HTTP Request
+
+`POST https://v4-api.smilebooth.com/api/v4/sharers/email/share`
+
+### Request Body JSON
+
+Parameter | Description
+--------- | -----------
+email | The email to send to
+uploadId | The image id to send
+galleryId | The id of the gallery the image is in
+
+## Send via MMS
+
+Send image to recipient via multimedia message.
+
+```curl
+curl -X POST \
+  https://v4-api.smilebooth.com/api/v4/sharers/mms/share \
+  -H 'Content-Type: application/json'
+  -d '{
+  "phone": "7192934678",
+  "uploadId": "15610",
+  "galleryId": "3"
+}'
+```
+
+> The above command will return a number (not sure what it is :))
+
+```json
+1234
+```
+
+### HTTP Request
+
+`POST https://v4-api.smilebooth.com/api/v4/sharers/mms/share`
+
+### Request Body JSON
+
+Parameter | Description
+--------- | -----------
+phone | The phone number to send it to
+uploadId | The image id to send
+galleryId | The id of the gallery the image is in
