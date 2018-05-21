@@ -221,10 +221,23 @@
         <ul class="search-results"></ul>
       <div id="toc" class="toc-list-h1">
           <li>
-            <a href="#introduction" class="toc-h1 toc-link" data-title="introduction">Introduction</a>
+            <a href="#overview" class="toc-h1 toc-link" data-title="overview">Overview</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#branches" class="toc-h2 toc-link" data-title="branches">Branches</a>
+                  </li>
+              </ul>
           </li>
           <li>
             <a href="#authentication" class="toc-h1 toc-link" data-title="authentication">Authentication</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-token" class="toc-h2 toc-link" data-title="get-token">Get token</a>
+                  </li>
+                  <li>
+                    <a href="#log-out" class="toc-h2 toc-link" data-title="log-out">Log out</a>
+                  </li>
+              </ul>
           </li>
           <li>
             <a href="#folders" class="toc-h1 toc-link" data-title="folders">Folders</a>
@@ -258,16 +271,19 @@
           </li>
       </div>
         <ul class="toc-footer">
-            <li><a href='#'>Sign Up for a Developer Key</a></li>
             <li><a href='https://github.com/lord/slate'>Documentation Powered by Slate</a></li>
         </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id='introduction'>Introduction</h1>
-<p>Welcome to the Smileserver documentation. Incomplete.</p>
-<h1 id='authentication'>Authentication</h1><pre class="highlight shell tab-shell"><code>curl -X POST <span class="se">\</span>
+        <h1 id='overview'>Overview</h1>
+<p>Smileserver handles all of Smilebooth&#39;s cloud functions. It is written in F# and uses <a href="https://suave.io/">Suave</a> as a server. This doument is incomplete, but a continuing effort. For a full list of API routes, check out the routes file in <code>src/app/Api/Routes.fs</code> and you might find that something you need is already built.</p>
+<h2 id='branches'>Branches</h2>
+<p>The current working branch is V4.</p>
+<h1 id='authentication'>Authentication</h1>
+<p>Authentication is built out loosely according to the Client Credientials flow. Send your username and password to the server and receive a token. Include this token in the <code>x-user-token</code> header for authenticated requests.</p>
+<h2 id='get-token'>Get token</h2><pre class="highlight shell tab-shell"><code>curl -X POST <span class="se">\</span>
   https://v4-api.smilebooth.com/api/v4/user/get-by-login-info <span class="se">\</span>
   -H <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
   -d <span class="s1">'{
@@ -288,9 +304,16 @@
   "id": 27
 }
 </code></pre>
-<p>Authentication is built out loosely according to the Client Credientials flow, and is not suitable for frontend applications where the code is available to the user.</p>
-
 <p>Send credentials via POST to <code>https://v4-api.smilebooth.com/api/v4/user/get-by-login-info</code> and a token is returned. To access authenticated endpoints, include this token in the header under the name: <code>x-user-token</code></p>
+<h2 id='log-out'>Log out</h2><pre class="highlight shell tab-shell"><code>curl -X POST <span class="se">\</span>
+  https://v4-api.smilebooth.com/api/v4/user/logout <span class="se">\</span>
+  -H <span class="s1">'Content-Type: application/json'</span>
+</code></pre>
+<blockquote>
+<p>The above request returns a blank response, status 200</p>
+</blockquote>
+
+<p>Just do dis: <code>POST https://v4-api.smilebooth.com/api/v4/user/logout</code></p>
 <h1 id='folders'>Folders</h1><h2 id='get-all-folders'>Get All Folders</h2>
 <p>This endpoint returns an array of objects which include folder names and ids. Currently there is a bug which returns repeat folder names, so results must be filtered on the receiving end.</p>
 <pre class="highlight shell tab-shell"><code>curl -X POST <span class="se">\</span>
