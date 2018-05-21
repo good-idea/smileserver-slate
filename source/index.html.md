@@ -11,11 +11,19 @@ toc_footers:
 search: true
 ---
 
-# Introduction
+# Overview
 
-Welcome to the Smileserver documentation. Incomplete.
+Smileserver handles all of Smilebooth's cloud functions. It is written in F# and uses [Suave](https://suave.io/). These douments are incomplete, for a full list of API routes, visit the routes file in `src/app/Api/Routes.fs`.
+
+## Branches
+
+The current working branch is V4.
 
 # Authentication
+
+Authentication is built out loosely according to the Client Credientials flow. You send your username and password to the server and receive a token which is to be included in subsequent authenticated requests.
+
+## Get token
 
 ```shell
 curl -X POST \
@@ -41,9 +49,17 @@ curl -X POST \
 }
 ```
 
-Authentication is built out loosely according to the Client Credientials flow, and is not suitable for frontend applications where the code is available to the user.
-
 Send credentials via POST to `https://v4-api.smilebooth.com/api/v4/user/get-by-login-info` and a token is returned. To access authenticated endpoints, include this token in the header under the name: `x-user-token`
+
+## Log out
+
+```shell
+curl -X POST \
+  https://v4-api.smilebooth.com/api/v4/user/logout \
+  -H 'Content-Type: application/json'
+```
+
+> The above request returns a blank response, status 200
 
 # Folders
 
