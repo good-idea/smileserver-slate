@@ -5,7 +5,6 @@ language_tabs: # must be one of https://git.io/vQNgJ
   - shell
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
   - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
 
 search: true
@@ -13,7 +12,7 @@ search: true
 
 # Overview
 
-Smileserver handles all of Smilebooth's cloud functions. It is written in F# and uses [Suave](https://suave.io/). These douments are incomplete, for a full list of API routes, visit the routes file in `src/app/Api/Routes.fs`.
+Smileserver handles all of Smilebooth's cloud functions. It is written in F# and uses [Suave](https://suave.io/) as a server. This doument is incomplete, but a continuing effort. For a full list of API routes, check out the routes file in `src/app/Api/Routes.fs` and you might find that something you need is already built.
 
 ## Branches
 
@@ -21,7 +20,7 @@ The current working branch is V4.
 
 # Authentication
 
-Authentication is built out loosely according to the Client Credientials flow. You send your username and password to the server and receive a token which is to be included in subsequent authenticated requests.
+Authentication is built out loosely according to the Client Credientials flow. Send your username and password to the server and receive a token. Include this token in the `x-user-token` header for authenticated requests.
 
 ## Get token
 
@@ -60,6 +59,8 @@ curl -X POST \
 ```
 
 > The above request returns a blank response, status 200
+
+Just do dis: `POST https://v4-api.smilebooth.com/api/v4/user/logout`
 
 # Folders
 
